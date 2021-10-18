@@ -1,113 +1,149 @@
-import React,{useEffect ,useState} from 'react'
+import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
- 
 
 
-function ProfileUpdate()
- {
-    const { id } = useParams();
-    console.log(id);
-    
-    const [username,setUsername]=useState("")
-    const [email,setEmail]=useState("")
-    const [bio, setBio]=useState("")
-    const [is_younger,setIs_younger]=useState(false)
-    const [age, setAge] = useState("")
-    const [gender, setGender]=useState("")
-    const [contact, setContact]=useState("")
-    const [address, setAddress]=useState("")
-    
+class ProfileUpdate extends React.Component {
+
+  constructor() {
+    super();
+    this.state = {
+      profile_id:'',
+      first_name:'',
+      last_name:'',
+      age: '',
+      gender: '',
+      contact: '',
+      bio: '',
+      address: ''
+      // user_id: '',
+      // username: '',
+      // email: '',
+      
+      // is_younger: ''
+    };
+    this.changeHandler = this.changeHandler.bind(this);
+    this.submitForm = this.submitForm.bind(this);
+  }
+
+  changeHandler = (e) => {
+    const target = e.target;
+    // if (target.name === 'username') {
+    //   var uname = target.value;
+    //   var targetuname = target.name;
+
+    // } else if (target.name === 'email') {
+    //   var uemail = target.value;
+    //   var targetemail = target.name;
+    if(target.name=== 'first_name'){
+       var ufname = target.value;
+       var  targetfname = target.name;
+    }else if(target.name === 'last_name'){
+      var ulname = target.value;
+      var targetlname = target.name;
+    }else if (target.name === 'age') {
+      var uage = target.value;
+      var targetage = target.name;
+    } else if (target.name === 'gender') {
+      var ugender = target.value;
+      var targetgender = target.name;
+    } else if (target.name === 'contact') {
+      var ucontact = target.value;
+      var targetcontact = target.name;
+    } else if (target.name === 'bio') {
+      var ubio = target.value;
+      var targetbio = target.name;
+    } else if (target.name === 'address') {
+      var uaddress = target.value;
+      var targetaddress = target.name;
   
-  
+    }
 
-    const [data, setData] = useState([]);
-    useEffect(() => {
-      fetch(`http://127.0.0.1:8000/checkdetails/4/`).then((result) => {
-        result.json().then((resp) => {
-          setData(resp);
-          
+    this.setState({
+      [targetfname]:[ufname],
+      [targetlname]:[ulname],
+      [targetage]: [uage],
+      [targetgender]: [ugender],
+      [targetcontact]: [ucontact],
+      [targetbio]: [ubio],
+      [targetaddress]: [uaddress]
 
+    });
+  };
+
+
+  submitForm(e) {
+    e.preventDefault();
+    var id = this.props.match.params.id;
+    const datas = {
+      first_name:this.state.first_name,
+      last_name:this.state.last_name,
+      age:this.state.age,
+      gender:this.state.gender,
+      contact:this.state.contact,
+      bio:this.state.bio,
+      address:this.state.address,
+      }
+
+    // }
+    console.log(typeof(JSON.stringify(this.state)));
+    fetch(`http://127.0.0.1:8000/updateuser/${id}/`, {
+      method: 'PATCH',
+      body: JSON.stringify(datas),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept':'application/json'
+      },
+      
+    }).then(response => response.json())
+      .then((data) => console.log(data))
+      .catch(function(error){
+        console.log(error);
+      })
+  }
+
+
+
+  fetchUserData() {
+    var id = this.props.match.params.id;
+    fetch(`http://127.0.0.1:8000/userdetails/${id}/`)
+      .then(response => response.json()).then((data) => {
+        this.setState({
+          profile_id:data.id,
+          first_name:data.first_name,
+          last_name:data.last_name,
+          age: data.age,
+          gender: data.gender,
+          contact: data.contact,
+          bio: data.bio,
+          address: data.address,
+          // is_younger: data.user.is_younger,
         });
-      });
-    },);
-    // console.log(data.user.username);
-    let val = data?.user;
-    console.log(val);
-    // const Update =()=>{
-    //   fetch(`http://127.0.0.1:8000/checkdetails/4/`).then((result)=>{
-    //     result.json().then((resp)=>{
-    //       // setData(resp);
-    //       console.log(resp);
-    //     })
-    //   })
-    // }
-    
-    // const user = data.user;
-    // console.log(user);
+      })
+  }
 
+  componentDidMount() {
+    this.fetchUserData();
+  }
 
-    // async function UpdateUser()
-    // {
-    //     let item = {username,email,bio,is_younger,age,gender,contact,address}
-    //     let result = await fetch(`http://127.0.0.1:8000/checkdetails/${id}/`,{
-    //         method : "POST",
-    //         body : JSON.stringify(item),
-    //         headers :{
-    //             "Content-Type" : "application/json",
-    //             "Accept" : "application/json"
-    //           }
-    //     })
-    //     // result = await result.json()
-        
-    //     // console.log(result);
-        
-    // }
-
-    
-
-  return (
-    <div>
-    
-       <h1>Update :{data.id}</h1>
-      
-      <input type="text" name="username" value={val.username} onChange={(e)=>setUsername(e.target.value)}/>
-      <br />
-      <br />
-      
-      <input type="email" value={val.email} name="email" onChange={(e)=>setEmail}/>
-      <br />
-       <input type="text" value={val.bio} name="bio" onChange={(e)=>setBio(e.target.value)}/>
-      <br />
-      <br />
-      <br />
-    
-      <input type="checkbox" value={val.is_younger} name="is_younger" onChange={(e)=>setIs_younger(e.target.value)} />
-      <br />
-      <br />
-      <br />
-      
-      <input type="text" value={data.age} onChange={(e)=>setAge(e.target.value)}
-       name="age" 
-      />
-      <br />
-      <br /><br />
-      {/*
-      <input type="text" value={val.gender} onChange={(e)=>setGender(e.target.value)}
-       name="gender" />
-      <br />
-      <br />
-      <input type="text" value={val.contact} onChange={(e)=>setContact(e.target.value)} 
-      name="contact"
-      />
-      <br />
-      <br />
-      <input type="address" value={val.address} onChange={(e)=>setAddress(e.target.checked)} name="address" />
-      <br />
-      <br /> */}
-      <button>change</button>  
-
-    </div>
-  );
+  render() {
+    return (
+      <div>Update user id:{this.props.match.params.id} <br />
+      {/* <h3>User id:{this.state.user.username}</h3> */}
+        <form method="post"> 
+        <input type="text" name="first_name" value={this.state.first_name}/><br />
+        <input type="text" name="last_name" value={this.state.last_name}/><br />
+        <input type="text" name="age" value={this.state.age} onChange={this.changeHandler} /><br />
+        <input type="text" name="gender" value={this.state.gender} onChange={this.changeHandler} /><br />
+        <input type="text" name="contact" value={this.state.contact} onChange={this.changeHandler} /><br />
+        <input type="text" name="bio" value={this.state.bio} onChange={this.changeHandler} /><br />
+        <input type="text" name="address" value={this.state.address} onChange={this.changeHandler} /><br />
+        <button onClick={this.submitForm}>Update</button>
+        </form>
+      </div>
+    )
+  }
 }
 
-export default ProfileUpdate
+
+
+export default ProfileUpdate;
