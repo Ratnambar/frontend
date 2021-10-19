@@ -15,7 +15,7 @@ function Register()
     async function signUp()
     {
       let item = {username,email,password,is_younger}
-      console.log(item);
+    
       let result = await fetch("http://127.0.0.1:8000/users/",{
           method : "POST",
           body : JSON.stringify(item),

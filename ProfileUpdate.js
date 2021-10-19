@@ -87,13 +87,13 @@ class ProfileUpdate extends React.Component {
     // }
     console.log(typeof(JSON.stringify(this.state)));
     fetch(`http://127.0.0.1:8000/updateuser/${id}/`, {
-      method: 'PATCH',
-      body: JSON.stringify(datas),
+      method: 'PUT',
+    
       headers: {
         'Content-Type': 'application/json',
         'Accept':'application/json'
       },
-      
+      body: JSON.stringify(datas),
     }).then(response => response.json())
       .then((data) => console.log(data))
       .catch(function(error){
@@ -129,15 +129,16 @@ class ProfileUpdate extends React.Component {
     return (
       <div>Update user id:{this.props.match.params.id} <br />
       {/* <h3>User id:{this.state.user.username}</h3> */}
-        <form method="post"> 
-        <input type="text" name="first_name" value={this.state.first_name}/><br />
-        <input type="text" name="last_name" value={this.state.last_name}/><br />
-        <input type="text" name="age" value={this.state.age} onChange={this.changeHandler} /><br />
-        <input type="text" name="gender" value={this.state.gender} onChange={this.changeHandler} /><br />
-        <input type="text" name="contact" value={this.state.contact} onChange={this.changeHandler} /><br />
-        <input type="text" name="bio" value={this.state.bio} onChange={this.changeHandler} /><br />
-        <input type="text" name="address" value={this.state.address} onChange={this.changeHandler} /><br />
-        <button onClick={this.submitForm}>Update</button>
+        <form method="post">
+          <input type="hidden" name="id" value={this.state.}/>
+          <input type="text" name="first_name" value={this.state.first_name} onChange={this.changeHandler} /><br />
+          <input type="text" name="last_name" value={this.state.last_name} onChange={this.changeHandler} /><br />
+          <input type="text" name="age" value={this.state.age} onChange={this.changeHandler} /><br />
+          <input type="text" name="gender" value={this.state.gender} onChange={this.changeHandler} /><br />
+          <input type="text" name="contact" value={this.state.contact} onChange={this.changeHandler} /><br />
+          <input type="text" name="bio" value={this.state.bio} onChange={this.changeHandler} /><br />
+          <input type="text" name="address" value={this.state.address} onChange={this.changeHandler} /><br />
+          <button onClick={this.submitForm}>Update</button>
         </form>
       </div>
     )

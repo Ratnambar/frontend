@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Link, Route,Switch } from 'react-router-dom';
 function Listusers() {
   const [data, setData] = useState([])
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/usersprofiles/").then((result) => {
+    fetch("http:key//127.0.0.1:8000/usersprofiles/").then((result) => {
       result.json().then((resp) => {
      
         setData(resp)
